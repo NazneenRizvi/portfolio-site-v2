@@ -21,6 +21,7 @@ export const metadata: Metadata = {
     default: "Nazneen Rizvi | Front-End Developer",
     template: "%s | Nazneen Rizvi",
   },
+  
 
   description:
     "Front-End Developer specializing in Next.js, React, TypeScript and Tailwind CSS. Explore my portfolio, projects and contact me for freelance or full-time opportunities.",
