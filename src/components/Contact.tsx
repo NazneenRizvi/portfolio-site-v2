@@ -1,14 +1,41 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
 import {
   FaEnvelope,
   FaGithub,
   FaLinkedin,
   FaMapMarkerAlt,
+  FaCheckCircle,
 } from "react-icons/fa";
 
 export default function Contact() {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+  const [status, setStatus] = useState<"idle" | "sending" | "success">("idle");
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!name || !email || !message) return;
+
+    setStatus("sending");
+    
+    // Simulate API call
+    setTimeout(() => {
+      setStatus("success");
+      setName("");
+      setEmail("");
+      setMessage("");
+      
+      // Reset back to idle after 5 seconds
+      setTimeout(() => {
+        setStatus("idle");
+      }, 5000);
+    }, 1500);
+  };
+
   return (
     <section
       id="contact"
@@ -97,37 +124,68 @@ export default function Contact() {
     whileInView={{ opacity: 1, x: 0 }}
     transition={{ duration: 0.6 }}
     viewport={{ once: true }}
-    className="bg-slate-900 border border-cyan-500/20 rounded-3xl p-8"
+    className="bg-slate-900 border border-cyan-500/20 rounded-3xl p-8 flex flex-col justify-center"
   >
-<form className="space-y-6">
+    {status === "success" ? (
+      <motion.div
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className="text-center space-y-4 py-8"
+      >
+        <FaCheckCircle className="text-cyan-400 text-6xl mx-auto animate-bounce" />
+        <h4 className="text-2xl font-bold text-white">Message Sent!</h4>
+        <p className="text-gray-400 max-w-sm mx-auto">
+          Thank you for reaching out. Nazneen will get back to you as soon as possible.
+        </p>
+      </motion.div>
+    ) : (
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <input
+          type="text"
+          placeholder="Your Name"
+          required
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          disabled={status === "sending"}
+          className="w-full bg-slate-800 border border-cyan-500/20 rounded-xl px-5 py-3 focus:outline-none focus:border-cyan-400 text-white placeholder-gray-500 disabled:opacity-50"
+        />
 
-  <input
-    type="text"
-    placeholder="Your Name"
-    className="w-full bg-slate-800 border border-cyan-500/20 rounded-xl px-5 py-3 focus:outline-none focus:border-cyan-400"
-  />
+        <input
+          type="email"
+          placeholder="Your Email"
+          required
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          disabled={status === "sending"}
+          className="w-full bg-slate-800 border border-cyan-500/20 rounded-xl px-5 py-3 focus:outline-none focus:border-cyan-400 text-white placeholder-gray-500 disabled:opacity-50"
+        />
 
-  <input
-    type="email"
-    placeholder="Your Email"
-    className="w-full bg-slate-800 border border-cyan-500/20 rounded-xl px-5 py-3 focus:outline-none focus:border-cyan-400"
-  />
+        <textarea
+          rows={6}
+          placeholder="Your Message"
+          required
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          disabled={status === "sending"}
+          className="w-full bg-slate-800 border border-cyan-500/20 rounded-xl px-5 py-3 focus:outline-none focus:border-cyan-400 text-white placeholder-gray-500 resize-none disabled:opacity-50"
+        />
 
-  <textarea
-    rows={6}
-    placeholder="Your Message"
-    className="w-full bg-slate-800 border border-cyan-500/20 rounded-xl px-5 py-3 focus:outline-none focus:border-cyan-400 resize-none"
-  />
-
-  <button
-    type="submit"
-    className="w-full bg-cyan-500 hover:bg-cyan-600 text-slate-950 font-semibold py-3 rounded-xl transition"
-  >
-    Send Message
-  </button>
-
-</form>
-
+        <button
+          type="submit"
+          disabled={status === "sending"}
+          className="w-full bg-cyan-500 hover:bg-cyan-600 text-slate-950 font-semibold py-3 rounded-xl transition duration-300 flex items-center justify-center gap-2 disabled:opacity-50"
+        >
+          {status === "sending" ? (
+            <>
+              <span className="w-5 h-5 border-2 border-slate-950 border-t-transparent rounded-full animate-spin"></span>
+              Sending...
+            </>
+          ) : (
+            "Send Message"
+          )}
+        </button>
+      </form>
+    )}
   </motion.div>
 
 </div>
