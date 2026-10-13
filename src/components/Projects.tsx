@@ -48,6 +48,15 @@ const projects = [
     featured: false,
     tech: ["HTML", "CSS", "JavaScript"],
   },
+  {
+    title: "Dubai Active‑Wear",
+    description: "A full‑stack React app that showcases a line of active‑wear products, with Supabase‑backed authentication, Stripe payments and a realtime inventory dashboard.",
+    image: "/projects/dubai-active-wear.png",
+    github: "https://github.com/NazneenRizvi/Dubai-active-wear-",
+    live: "https://dubai-active-wear.vercel.app/",
+    featured: false,
+    tech: ["React", "Next.js", "Supabase", "Stripe", "Tailwind CSS"],
+  },
 ];
 
 export default function Projects() {

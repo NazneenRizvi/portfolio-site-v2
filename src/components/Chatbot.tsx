@@ -270,6 +270,72 @@ export default function Chatbot() {
     setMessages((prev) => [...prev, { id: Math.random().toString(36), sender: "bot", text }]);
   };
 
+
+// ── Name Helpers ───────────────────────────────────────────────────────────
+
+function extractName(input: string): string | null {
+  let text = input.trim();
+
+  text = text.replace(/[.,!?]/g, "");
+
+  const patterns = [
+    /my name is\s+(.+)/i,
+    /i am\s+(.+)/i,
+    /i'm\s+(.+)/i,
+    /im\s+(.+)/i,
+    /it's\s+(.+)/i,
+    /its\s+(.+)/i,
+    /people call me\s+(.+)/i,
+    /you can call me\s+(.+)/i,
+    /call me\s+(.+)/i,
+    /name is\s+(.+)/i,
+  ];
+
+  for (const pattern of patterns) {
+    const match = text.match(pattern);
+    if (match?.[1]) {
+      return formatName(match[1]);
+    }
+  }
+
+  return formatName(text);
+}
+
+function formatName(name: string): string | null {
+  const ignore = [
+    "yes",
+    "yeah",
+    "yep",
+    "ok",
+    "okay",
+    "sure",
+    "hello",
+    "hi",
+    "hey",
+    "ya",
+    "why",
+    "not",
+    "thanks",
+    "thank",
+    "buddy",
+    "bro",
+  ];
+
+  const words = name
+    .trim()
+    .split(/\s+/)
+    .filter((word) => !ignore.includes(word.toLowerCase()));
+
+  if (!words.length) return null;
+
+  return words
+    .map(
+      (word) =>
+        word.charAt(0).toUpperCase() +
+        word.slice(1).toLowerCase()
+    )
+    .join(" ");
+}
   // Send one or more bot messages with typing delay between each
   const botSay = (lines: string[], delayBetween = 1300) => {
     setIsTyping(true);
